@@ -1,0 +1,25 @@
+# config.yaml.example
+# 이 파일을 config.yaml로 복사 후 실제 키 입력
+# config.yaml은 .gitignore에 추가되어 있음 (절대 커밋 금지)
+
+api_keys:
+  hrdnet: "YOUR_HRDNET_API_KEY"          # 고용24 Open API 키
+  data_go_kr: "YOUR_DATA_GO_KR_KEY"      # 공공데이터포털 키
+  gemini: "YOUR_GEMINI_API_KEY"    # Gemini API 키 (무료 티어 지원)
+  github_token: "YOUR_GITHUB_TOKEN"      # GitHub 리포트 push용
+
+github:
+  repo: "your-org/bootcamp-intelligence"  # 리포트 저장할 GitHub 레포
+  branch: "main"
+  reports_path: "reports"                 # 레포 내 리포트 저장 경로
+
+settings:
+  target_keywords:                        # HRD-Net 검색 키워드
+    - "AI"
+    - "인공지능"
+    - "AI 에이전트"
+    - "휴머노이드"
+    - "로봇"
+    - "데이터"
+  target_region: "서울"                   # 지역 필터 (빈칸 = 전국)
+  report_language: "ko"

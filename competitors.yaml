@@ -1,0 +1,50 @@
+# competitors.yaml
+# 분석할 경쟁사 목록 - 직접 추가/수정 가능
+
+competitors:
+  - name: "패스트캠퍼스"
+    landing_urls:
+      - "https://fastcampus.co.kr/categories/development"
+      - "https://fastcampus.co.kr/categories/data"
+    meta_page_id: "fastcampus.kr"
+    hrdnet_org_name: "패스트캠퍼스"
+
+  - name: "제로베이스"
+    landing_urls:
+      - "https://zero-base.co.kr/category/bootcamp"
+    meta_page_id: "zerobaseschool"
+    hrdnet_org_name: "제로베이스"
+
+  - name: "멀티캠퍼스"
+    landing_urls:
+      - "https://www.multicampus.com/em/enrolment/courseDetai?p_menu=NzUjNzU%3D&p_gubun=Qg%3D%3D"
+    meta_page_id: "multicampus"
+    hrdnet_org_name: "멀티캠퍼스"
+
+  - name: "엘리스"
+    landing_urls:
+      - "https://elice.io/ko/track"
+    meta_page_id: "elice.io"
+    hrdnet_org_name: "엘리스"
+
+  - name: "스파르타코딩클럽"
+    landing_urls:
+      - "https://spartacodingclub.kr/nb"
+    meta_page_id: "spartacodingclub"
+    hrdnet_org_name: "스파르타코딩클럽"
+
+  - name: "코드잇"
+    landing_urls:
+      - "https://sprint.codeit.kr"
+    meta_page_id: "codeit.kr"
+    hrdnet_org_name: "코드잇"
+
+# 분석 포커스 키워드 (AI 교육 관련)
+focus_keywords:
+  - "AI 에이전트"
+  - "인공지능"
+  - "비전공자"
+  - "취업연계"
+  - "휴머노이드"
+  - "국비지원"
+  - "K-디지털"
