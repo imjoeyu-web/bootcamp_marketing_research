@@ -59,13 +59,13 @@
 ### 요즘것들
 
 - [마감임박 D-3](https://www.allforyoung.com/posts/81224)
+- [D-13](https://www.allforyoung.com/posts/82585)
+- [D-28](https://www.allforyoung.com/posts/82584)
+- [D-28](https://www.allforyoung.com/posts/82583)
 - [D-148](https://www.allforyoung.com/posts/82578)
 - [D-15](https://www.allforyoung.com/posts/82575)
 - [D-20](https://www.allforyoung.com/posts/82570)
 - [D-24](https://www.allforyoung.com/posts/82566)
-- [D-22](https://www.allforyoung.com/posts/82565)
-- [D-24](https://www.allforyoung.com/posts/82563)
-- [D-24](https://www.allforyoung.com/posts/82562)
 - *외 56건*
 
 ### 링커리어
