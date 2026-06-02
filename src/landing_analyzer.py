@@ -155,7 +155,7 @@ def run(config: dict = None) -> list:
     print("=" * 50)
 
     comp_data_path = Path(__file__).parent.parent / "competitors.yaml"
-    with open(comp_data_path) as f:
+    with open(comp_data_path, encoding='utf-8') as f:
         comp_data = yaml.safe_load(f)
 
     competitors = comp_data["competitors"]

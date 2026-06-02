@@ -11,6 +11,10 @@ run.py
   python run.py --step report      # 리포트 생성만
 """
 
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
+sys.stderr.reconfigure(encoding='utf-8')
+
 import argparse
 import json
 import yaml
@@ -36,9 +40,9 @@ def load_config():
         print(f"⚠️  config.yaml 없음. {example_path}를 복사해서 작성해주세요.")
         print("   cp config.yaml.example config.yaml")
         # 데모 모드로 실행
-        with open(example_path) as f:
+        with open(example_path, encoding='utf-8') as f:
             return yaml.safe_load(f)
-    with open(config_path) as f:
+    with open(config_path, encoding='utf-8') as f:
         return yaml.safe_load(f)
 
 

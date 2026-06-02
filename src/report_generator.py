@@ -1,6 +1,6 @@
 """
 report_generator.py
-수집/분석 데이터를 Markdown 주간 리포트로 생성하고 GitHub에 push
+마케팅/모집 전략 중심 주간 리포트 생성 + GitHub push
 """
 
 import json
@@ -13,231 +13,238 @@ from pathlib import Path
 
 def load_config():
     config_path = Path(__file__).parent.parent / "config.yaml"
-    with open(config_path) as f:
+    with open(config_path, encoding='utf-8') as f:
         return yaml.safe_load(f)
 
 
-def generate_report(courses: list, ads_data: dict, youth_posts: list, analysis: dict) -> str:
-    """Markdown 리포트 생성"""
+def generate_report(youth_posts: list, ads_data: dict, analysis: dict) -> str:
     now = datetime.now()
     date_str = now.strftime("%Y년 %m월 %d일")
     week_str = now.strftime("W%W")
 
+    copy_analysis = analysis.get("copy_analysis", {})
+    landing_analysis = analysis.get("landing_analysis", {})
+    copy_patterns = copy_analysis.get("copy_patterns", {})
+
     lines = [
-        f"# 📊 부트캠프 경쟁사 모집/마케팅 동향 리포트",
+        f"# 부트캠프 모집/마케팅 동향 리포트",
         f"",
-        f"> 생성일: {date_str} | 주차: {week_str}",
-        f"> 자동 생성 by bootcamp-intelligence pipeline",
+        f"> 기준일: {date_str} | {week_str}주차",
         f"",
         f"---",
         f"",
         f"## 목차",
-        f"1. [시장 현황 요약](#1-시장-현황-요약)",
-        f"2. [HRD-Net 훈련과정 동향](#2-hrd-net-훈련과정-동향)",
-        f"3. [경쟁사 랜딩페이지 분석](#3-경쟁사-랜딩페이지-분석)",
-        f"4. [청년 플랫폼 교육 공고 동향](#4-청년-플랫폼-교육-공고-동향)",
-        f"5. [Meta 광고 소재 동향](#5-meta-광고-소재-동향)",
-        f"6. [데이톤 기회 포인트](#6-데이톤-기회-포인트)",
+        f"1. [이번 주 수집 현황](#1-이번-주-수집-현황)",
+        f"2. [공고 카피 패턴 분석](#2-공고-카피-패턴-분석)",
+        f"3. [채널별 모집 전략](#3-채널별-모집-전략)",
+        f"4. [랜딩페이지 마케팅 전략](#4-랜딩페이지-마케팅-전략)",
+        f"5. [Meta 광고 소재 모니터링](#5-meta-광고-소재-모니터링)",
+        f"6. [수집 공고 샘플](#6-수집-공고-샘플)",
         f"",
         f"---",
         f"",
     ]
 
-    # 1. 시장 현황 요약
+    # 1. 수집 현황
+    by_platform = {}
+    for post in youth_posts:
+        plat = post.get("platform", "기타")
+        by_platform.setdefault(plat, []).append(post)
+
     lines += [
-        f"## 1. 시장 현황 요약",
+        f"## 1. 이번 주 수집 현황",
+        f"",
+        f"| 플랫폼 | 수집 공고 수 |",
+        f"|---|---|",
+    ]
+    for plat, posts in by_platform.items():
+        lines.append(f"| {plat} | {len(posts)}건 |")
+    lines += [
+        f"| **합계** | **{len(youth_posts)}건** |",
         f"",
     ]
 
-    landing = analysis.get("landing_analysis", {})
-    course_analysis = analysis.get("course_analysis", {})
-
-    if "market_trend" in course_analysis:
-        lines += [
-            f"### 전반적 트렌드",
-            f"{course_analysis.get('market_trend', '-')}",
-            f"",
-        ]
-
-    if "recommended_positioning" in landing:
-        lines += [
-            f"### 데이톤 추천 포지셔닝",
-            f"> **{landing.get('recommended_positioning', '-')}**",
-            f"",
-        ]
-
-    # 2. HRD-Net 훈련과정 동향
+    # 2. 카피 패턴 분석
     lines += [
         f"---",
         f"",
-        f"## 2. HRD-Net 훈련과정 동향",
-        f"",
-        f"**수집 과정 수:** {len(courses)}개",
+        f"## 2. 공고 카피 패턴 분석",
         f"",
     ]
 
-    if "top_keywords" in course_analysis:
-        kws = course_analysis["top_keywords"]
+    if copy_patterns.get("hook_phrases"):
+        lines += [f"### 후킹 문구", f""]
+        lines.append(" ".join([f"`{p}`" for p in copy_patterns["hook_phrases"]]))
+        lines.append("")
+
+    if copy_patterns.get("target_expressions"):
+        lines += [f"### 타겟 명시 표현", f""]
+        lines.append(" ".join([f"`{p}`" for p in copy_patterns["target_expressions"]]))
+        lines.append("")
+
+    if copy_patterns.get("benefit_expressions"):
+        lines += [f"### 혜택 강조 표현", f""]
+        lines.append(" ".join([f"`{p}`" for p in copy_patterns["benefit_expressions"]]))
+        lines.append("")
+
+    if copy_patterns.get("urgency_expressions"):
+        lines += [f"### 긴박감 조성 표현", f""]
+        lines.append(" ".join([f"`{p}`" for p in copy_patterns["urgency_expressions"]]))
+        lines.append("")
+
+    if copy_analysis.get("title_formulas"):
+        lines += [f"### 효과적인 제목 공식", f""]
+        for formula in copy_analysis["title_formulas"]:
+            lines.append(f"- {formula}")
+        lines.append("")
+
+    if copy_analysis.get("cta_patterns"):
+        lines += [f"### CTA 문구 패턴", f""]
+        lines.append(" ".join([f"`{c}`" for c in copy_analysis["cta_patterns"]]))
+        lines.append("")
+
+    if copy_analysis.get("social_proof_types"):
+        lines += [f"### 사회적 증거 활용 방식", f""]
+        for sp in copy_analysis["social_proof_types"]:
+            lines.append(f"- {sp}")
+        lines.append("")
+
+    if copy_analysis.get("recruitment_timing"):
         lines += [
-            f"### 주요 키워드 TOP {len(kws)}",
+            f"### 모집 타이밍 패턴",
             f"",
-            " ".join([f"`{kw}`" for kw in kws]),
+            f"{copy_analysis['recruitment_timing']}",
             f"",
         ]
 
-    if "org_count" in course_analysis and course_analysis["org_count"]:
+    # 3. 채널별 전략
+    lines += [
+        f"---",
+        f"",
+        f"## 3. 채널별 모집 전략",
+        f"",
+    ]
+
+    channel_strategy = copy_analysis.get("channel_strategy", {})
+    if channel_strategy:
         lines += [
-            f"### 기관별 AI 과정 수",
-            f"",
-            f"| 기관 | 과정 수 |",
+            f"| 채널 | 주요 전략/톤 |",
             f"|---|---|",
         ]
-        for org, cnt in sorted(course_analysis["org_count"].items(), key=lambda x: -x[1]):
-            lines.append(f"| {org} | {cnt} |")
-        lines.append(f"")
+        for channel, strategy in channel_strategy.items():
+            lines.append(f"| {channel} | {strategy} |")
+        lines.append("")
+    else:
+        lines += [f"수집 데이터 부족 — 다음 주 업데이트 예정", f""]
 
-    if courses:
-        lines += [
-            f"### 최근 수집된 과정 목록",
-            f"",
-            f"| 기관 | 과정명 | 지역 | 정원 |",
-            f"|---|---|---|---|",
-        ]
-        for c in courses[:15]:
-            org = c.get("traInstNm", "-")
-            name = c.get("trprNm", "-")
-            area = c.get("traArea1Nm", "-")
-            cap = c.get("yardMan", "-")
-            lines.append(f"| {org} | {name} | {area} | {cap} |")
-        if len(courses) > 15:
-            lines.append(f"| ... | *외 {len(courses)-15}개* | | |")
-        lines.append(f"")
-
-    # 3. 경쟁사 랜딩페이지 분석
+    # 4. 랜딩페이지 마케팅 전략
     lines += [
         f"---",
         f"",
-        f"## 3. 경쟁사 랜딩페이지 분석",
+        f"## 4. 랜딩페이지 마케팅 전략",
         f"",
     ]
 
-    competitors_analysis = landing.get("competitors", [])
-    for comp in competitors_analysis:
-        name = comp.get("name", "")
-        lines += [
-            f"### 🏢 {name}",
-            f"",
-            f"**포지셔닝:** {comp.get('positioning', '-')}",
-            f"",
-            f"| 항목 | 내용 |",
-            f"|---|---|",
-            f"| 타겟 | {', '.join(comp.get('target_persona', []))} |",
-            f"| 주요 소구점 | {', '.join(comp.get('appeal_types', []))} |",
-            f"| CTA 전략 | {comp.get('cta_strategy', '-')} |",
-            f"| 차별점 | {', '.join(comp.get('differentiators', []))} |",
-            f"| 약점/공백 | {comp.get('weakness', '-')} |",
-            f"",
-        ]
+    if landing_analysis.get("lp_structure"):
+        lines += [f"### 전형적인 LP 설득 구조", f"", f"{landing_analysis['lp_structure']}", f""]
 
-    # 4. 청년 플랫폼 교육 공고 동향
+    if landing_analysis.get("headline_patterns"):
+        lines += [f"### 헤드카피 패턴", f""]
+        for p in landing_analysis["headline_patterns"]:
+            lines.append(f"- {p}")
+        lines.append("")
+
+    if landing_analysis.get("cta_strategy"):
+        cta = landing_analysis["cta_strategy"]
+        lines += [f"### CTA 전략", f""]
+        if cta.get("common_ctas"):
+            lines.append("**자주 쓰이는 CTA:** " + " / ".join([f"`{c}`" for c in cta["common_ctas"]]))
+        if cta.get("placement"):
+            lines.append(f"**배치 전략:** {cta['placement']}")
+        lines.append("")
+
+    if landing_analysis.get("social_proof_usage"):
+        lines += [f"### 사회적 증거 활용", f""]
+        for sp in landing_analysis["social_proof_usage"]:
+            lines.append(f"- {sp}")
+        lines.append("")
+
+    if landing_analysis.get("benefit_framing"):
+        lines += [f"### 혜택 프레이밍 방식", f""]
+        for bf in landing_analysis["benefit_framing"]:
+            lines.append(f"- {bf}")
+        lines.append("")
+
+    if landing_analysis.get("effective_elements"):
+        lines += [f"### 효과적인 LP 요소", f""]
+        for el in landing_analysis["effective_elements"]:
+            lines.append(f"- {el}")
+        lines.append("")
+
+    # 5. Meta 광고
     lines += [
         f"---",
         f"",
-        f"## 4. 청년 플랫폼 교육 공고 동향",
-        f"",
-        f"**수집 공고 수:** {len(youth_posts)}건 (요즘것들 / 링커리어 / 슈퍼루키)",
-        f"",
-    ]
-
-    youth_analysis = analysis.get("youth_platform_analysis", {})
-
-    if "hook_patterns" in youth_analysis:
-        lines += [f"### 자주 쓰이는 후킹 문구", f""]
-        lines.append(" ".join([f"`{p}`" for p in youth_analysis["hook_patterns"]]))
-        lines.append(f"")
-
-    if "title_strategies" in youth_analysis:
-        lines += [f"### 제목 작성 전략", f""]
-        for s in youth_analysis["title_strategies"]:
-            lines.append(f"- {s}")
-        lines.append(f"")
-
-    if "dayton_copy_suggestions" in youth_analysis:
-        lines += [f"### 💡 데이톤 카피 제안", f""]
-        for i, s in enumerate(youth_analysis["dayton_copy_suggestions"], 1):
-            lines.append(f"{i}. **{s}**")
-        lines.append(f"")
-
-    if youth_posts:
-        by_platform = {}
-        for post in youth_posts:
-            plat = post.get("platform", "기타")
-            by_platform.setdefault(plat, []).append(post)
-
-        lines += [f"### 플랫폼별 수집 공고 샘플", f""]
-        for plat, posts in by_platform.items():
-            lines += [f"**{plat}** ({len(posts)}건)"]
-            for post in posts[:5]:
-                title = post.get("title", "-")
-                url = post.get("url", "")
-                lines.append(f"- [{title}]({url})")
-            lines.append(f"")
-
-    # 5. Meta 광고 소재 동향
-    lines += [
-        f"---",
-        f"",
-        f"## 5. Meta 광고 소재 동향",
+        f"## 5. Meta 광고 소재 모니터링",
         f"",
     ]
 
     manual_links = []
+    auto_collected = []
     for name, ads in ads_data.items():
-        if ads and ads[0].get("_status") == "manual_required":
+        if not ads:
+            continue
+        if ads[0].get("_status") == "manual_required":
             url = ads[0].get("_manual_url", "")
-            manual_links.append(f"- [{name}]({url})")
-        elif ads:
-            lines += [f"### {name}", f"수집된 광고: {len(ads)}개", f""]
+            manual_links.append(f"| {name} | [광고 라이브러리 보기]({url}) |")
+        else:
+            auto_collected.append(f"| {name} | {len(ads)}개 |")
+
+    if auto_collected:
+        lines += [f"### 자동 수집", f"", f"| 채널 | 광고 수 |", f"|---|---|"]
+        lines.extend(auto_collected)
+        lines.append("")
 
     if manual_links:
         lines += [
-            f"### 수동 확인 필요 (Meta 광고 라이브러리)",
+            f"### 수동 확인 필요",
             f"",
-        ] + manual_links + [f""]
+            f"| 채널 | 링크 |",
+            f"|---|---|",
+        ]
+        lines.extend(manual_links)
+        lines.append("")
 
-    # 6. 데이톤 기회 포인트
+    # 6. 공고 샘플
     lines += [
         f"---",
         f"",
-        f"## 6. 데이톤 기회 포인트",
+        f"## 6. 수집 공고 샘플",
         f"",
     ]
 
-    market_gaps = landing.get("market_gaps", []) + course_analysis.get("empty_positions", [])
-    if market_gaps:
-        lines += [f"### 🎯 시장 공백 (아무도 안 하고 있는 포지션)", f""]
-        for gap in market_gaps:
-            lines.append(f"- {gap}")
-        lines.append(f"")
-
-    opportunities = course_analysis.get("dayton_opportunities", [])
-    if opportunities:
-        lines += [f"### 💡 데이톤 활용 기회", f""]
-        for opp in opportunities:
-            lines.append(f"- {opp}")
-        lines.append(f"")
+    for plat, posts in by_platform.items():
+        lines += [f"### {plat}", f""]
+        for post in posts[:8]:
+            title = post.get("title", "-")
+            url = post.get("url", "")
+            deadline = post.get("deadline", "")
+            deadline_str = f" `{deadline}`" if deadline else ""
+            lines.append(f"- [{title}]({url}){deadline_str}")
+        if len(posts) > 8:
+            lines.append(f"- *외 {len(posts)-8}건*")
+        lines.append("")
 
     lines += [
         f"---",
         f"",
-        f"*자동 생성된 리포트입니다. 데이터 기준: {date_str}*",
+        f"*자동 생성 리포트 | 기준일: {date_str}*",
     ]
 
     return "\n".join(lines)
 
 
 def push_to_github(content: str, filename: str, config: dict) -> bool:
-    """GitHub 레포에 리포트 파일 push"""
     token = config["api_keys"]["github_token"]
     repo = config["github"]["repo"]
     branch = config["github"].get("branch", "main")
@@ -253,14 +260,13 @@ def push_to_github(content: str, filename: str, config: dict) -> bool:
         "Accept": "application/vnd.github.v3+json"
     }
 
-    # 파일이 이미 있으면 SHA 필요
     existing_sha = None
     resp = requests.get(api_url, headers=headers)
     if resp.status_code == 200:
         existing_sha = resp.json().get("sha")
 
     payload = {
-        "message": f"📊 리포트 자동 업데이트: {filename}",
+        "message": f"리포트 업데이트: {filename}",
         "content": base64.b64encode(content.encode("utf-8")).decode("utf-8"),
         "branch": branch,
     }
@@ -272,42 +278,36 @@ def push_to_github(content: str, filename: str, config: dict) -> bool:
         print(f"  ✅ GitHub push 완료: {repo}/{reports_path}/{filename}")
         return True
     else:
-        print(f"  ⚠️  GitHub push 실패: {resp.status_code} {resp.text[:200]}")
+        print(f"  ⚠️  GitHub push 실패: {resp.status_code}")
         return False
 
 
 def save_local(content: str, filename: str) -> Path:
-    """로컬 저장"""
     output_dir = Path(__file__).parent.parent / "reports"
     output_dir.mkdir(parents=True, exist_ok=True)
     output_path = output_dir / filename
-
     output_path.write_text(content, encoding="utf-8")
     print(f"  💾 로컬 저장: {output_path}")
     return output_path
 
 
-def run(courses: list = None, ads_data: dict = None, youth_posts: list = None, analysis: dict = None, config: dict = None) -> Path:
-    """리포트 생성 파이프라인 실행"""
-    print("\n📝 [5단계] 리포트 생성 시작")
+def run(courses: list = None, ads_data: dict = None, youth_posts: list = None,
+        analysis: dict = None, config: dict = None) -> Path:
+    print("\n📝 리포트 생성 시작")
     print("=" * 50)
 
     if config is None:
         config = load_config()
 
-    courses = courses or []
-    ads_data = ads_data or {}
     youth_posts = youth_posts or []
+    ads_data = ads_data or {}
     analysis = analysis or {}
 
-    report_content = generate_report(courses, ads_data, youth_posts, analysis)
+    report_content = generate_report(youth_posts, ads_data, analysis)
     date_str = datetime.now().strftime("%Y%m%d")
-    filename = f"{date_str}_bootcamp_intel_report.md"
+    filename = f"{date_str}_marketing_report.md"
 
-    # 로컬 저장
     local_path = save_local(report_content, filename)
-
-    # GitHub push
     push_to_github(report_content, filename, config)
 
     print(f"\n✅ 리포트 생성 완료: {filename}")

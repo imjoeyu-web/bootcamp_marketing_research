@@ -13,7 +13,7 @@ from pathlib import Path
 
 def load_competitors():
     path = Path(__file__).parent.parent / "competitors.yaml"
-    with open(path) as f:
+    with open(path, encoding='utf-8') as f:
         return yaml.safe_load(f)
 
 

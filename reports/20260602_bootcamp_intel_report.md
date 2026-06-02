@@ -73,11 +73,43 @@
 
 ## 4. 청년 플랫폼 교육 공고 동향
 
-**수집 공고 수:** 0건 (요즘것들 / 링커리어 / 슈퍼루키)
+**수집 공고 수:** 113건 (요즘것들 / 링커리어 / 슈퍼루키)
+
+### 플랫폼별 수집 공고 샘플
+
+**요즘것들** (64건)
+- [마감임박 D-3](https://www.allforyoung.com/posts/81224)
+- [D-148](https://www.allforyoung.com/posts/82578)
+- [D-15](https://www.allforyoung.com/posts/82575)
+- [D-20](https://www.allforyoung.com/posts/82570)
+- [D-24](https://www.allforyoung.com/posts/82566)
+
+**링커리어** (6건)
+- [추천[국비지원] 건설산업교육원 2026년도 플랜트교육 여름학기 교육생 모집 (~6/4)](https://linkareer.com/activity/323191)
+- [추천AI 상상 그라운드 1기 모집 (~7/6)](https://linkareer.com/activity/321847)
+- [추천[국비지원] 건설산업교육원 2026년도 플랜트교육 여름학기 교육생 모집 (~6/4)](https://linkareer.com/activity/323191)
+- [추천AI 상상 그라운드 1기 모집 (~7/6)](https://linkareer.com/activity/321847)
+- [추천[국비지원] 건설산업교육원 2026년도 플랜트교육 여름학기 교육생 모집 (~6/4)](https://linkareer.com/activity/323191)
+
+**슈퍼루키** (43건)
+- [AI 기반 데이터 분석 및 비즈니스 솔루션 설계 과정](https://www.superookie.com/seminars/6a1ce89f49d7420d401d1a33)
+- [한국소프트웨어인재개발원](https://www.superookie.com/seminars/6a194bf06ebba30c561f20d1)
+- [멀티캠퍼스](https://www.superookie.com/seminars/6a19464a54d45962c959dff4)
+- [구디아카데미](https://www.superookie.com/seminars/6a192d713e600608364e2141)
+- [에이콘아카데미 홍대학원](https://www.superookie.com/seminars/6a180ca83e600608364dccf6)
 
 ---
 
 ## 5. Meta 광고 소재 동향
+
+### 수동 확인 필요 (Meta 광고 라이브러리)
+
+- [패스트캠퍼스](https://www.facebook.com/ads/library/?active_status=active&ad_type=all&country=KR&q=fastcampus.kr&search_type=page)
+- [제로베이스](https://www.facebook.com/ads/library/?active_status=active&ad_type=all&country=KR&q=zerobaseschool&search_type=page)
+- [멀티캠퍼스](https://www.facebook.com/ads/library/?active_status=active&ad_type=all&country=KR&q=multicampus&search_type=page)
+- [엘리스](https://www.facebook.com/ads/library/?active_status=active&ad_type=all&country=KR&q=elice.io&search_type=page)
+- [스파르타코딩클럽](https://www.facebook.com/ads/library/?active_status=active&ad_type=all&country=KR&q=spartacodingclub&search_type=page)
+- [코드잇](https://www.facebook.com/ads/library/?active_status=active&ad_type=all&country=KR&q=codeit.kr&search_type=page)
 
 ---
 
